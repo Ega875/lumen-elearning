@@ -18,4 +18,14 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/users', 'UserController@index');
-$router->post('/login', 'UserController@login');
+$router->post('api/login', 'AuthController@login');
+
+$router->get('/api/test-hello', function () {
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Hello World! API Lumen berhasil terhubung.',
+        'timestamp' => date('Y-m-d H:i:s')
+    ], 200);
+});
+
+$router->post('/api/tugas', 'TugasController@store');

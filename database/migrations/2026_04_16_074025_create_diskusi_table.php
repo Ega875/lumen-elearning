@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('diskusi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kelas_id')->constrained('id')->on('kelas')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('id')->on('user')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('id')->on('users')->onDelete('cascade');
             $table->text('isi_pesan');
             $table->timestamps();
         });
