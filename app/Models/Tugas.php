@@ -10,7 +10,7 @@ class Tugas extends Model
     protected $table = 'tugas';
 
     // Set Primary Key sesuai ERD
-    protected $primaryKey = 'id_tugas';
+    protected $primaryKey = 'id';
 
     // Daftarkan semua kolom yang bisa diisi (Mass Assignable)
     protected $fillable = [

@@ -2,30 +2,40 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
-
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// Route tanpa prefix 'api'
 $router->get('/users', 'UserController@index');
-$router->post('api/login', 'AuthController@login');
 
-$router->get('/api/test-hello', function () {
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Hello World! API Lumen berhasil terhubung.',
-        'timestamp' => date('Y-m-d H:i:s')
-    ], 200);
+/*
+|--------------------------------------------------------------------------
+| Grup Rute API
+|--------------------------------------------------------------------------
+*/
+$router->group(['prefix' => 'api'], function () use ($router) {
+    
+    // 🟢 JALUR BEBAS: Bisa diakses tanpa token
+    $router->post('/login', 'AuthController@login');
+    
+    $router->get('/test-hello', function () {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Hello World! API Lumen berhasil terhubung.',
+            'timestamp' => date('Y-m-d H:i:s')
+        ], 200);
+    });
+
+    // 🔴 JALUR TERKUNCI: Wajib membawa Token JWT (Dilindungi Middleware)
+    $router->group(['middleware' => 'jwt.auth'], function () use ($router) {
+        
+        // Manajemen Tugas
+        $router->post('/tugas', 'TugasController@store');      // Buat tugas
+        $router->get('/tugas', 'TugasController@index');       // Tampilkan semua tugas
+        $router->get('/tugas/{id}', 'TugasController@show');   // Tampilkan detail satu tugas
+        $router->post('/tugas/{id}', 'TugasController@update');  // Edit tugas (Tetap pakai POST karena ada upload file)
+        $router->delete('/tugas/{id}', 'TugasController@destroy'); // Hapus tugas
+    });
+
 });
-
-$router->post('/api/tugas', 'TugasController@store');
