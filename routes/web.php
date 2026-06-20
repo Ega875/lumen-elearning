@@ -37,10 +37,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/tugas/{id}', 'TugasController@update');  // Edit tugas (Tetap pakai POST karena ada upload file)
         $router->delete('/tugas/{id}', 'TugasController@destroy'); // Hapus tugas
 
+        // Manajemen Pengumpulan Tugas
+        $router->post('/tugas/{tugasId}/kumpul', 'PengumpulanController@store');// Siswa kumpulkan tugas (upload jawaban)
+        $router->get('/tugas/{tugasId}/jawaban', 'PengumpulanController@listJawaban'); // Guru lihat jawaban
+        $router->post('/jawaban/{id}/nilai', 'PengumpulanController@beriNilai');  // Guru beri nilai
+
         // Manajemen Kelas
         $router->post('/kelas', 'KelasController@store');      // Guru bikin kelas
         $router->post('/kelas/join', 'KelasController@join');  // Siswa gabung kelas
         $router->delete('/kelas/{id}/leave', 'KelasController@leave'); // Siswa keluar kelas
+        
+        // --- FORUM DISKUSI ---
+        $router->post('/kelas/{kelasId}/diskusi', 'DiskusiController@store'); // Kirim pesan
+        $router->get('/kelas/{kelasId}/diskusi', 'DiskusiController@index');  // Lihat semua pesan
     });
 
 });
