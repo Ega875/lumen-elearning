@@ -18,6 +18,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     
     // 🟢 JALUR BEBAS: Bisa diakses tanpa token
     $router->post('/login', 'AuthController@login');
+    $router->post('/register', 'AuthController@register'); // --- TAMBAHKAN BARIS INI ---
     
     $router->get('/test-hello', function () {
         return response()->json([
