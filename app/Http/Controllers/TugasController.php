@@ -16,7 +16,7 @@ class TugasController extends Controller
             'kelas_id'      => 'required|integer',
             'judul_tugas'   => 'required|string|max:150',
             'deskripsi'     => 'nullable|string',
-            'deadline'      => 'required|date',
+            'deadline'      => 'nullable|date',
             'lampiran_file' => 'nullable|file|mimes:doc,docx,pdf|max:10240' 
         ]);
 
@@ -144,7 +144,7 @@ class TugasController extends Controller
             'kelas_id'      => 'required|integer',
             'judul_tugas'   => 'required|string|max:150',
             'deskripsi'     => 'nullable|string',
-            'deadline'      => 'required|date',
+            'deadline'      => 'nullable|date',
             'lampiran_file' => 'nullable|file|mimes:doc,docx,pdf|max:10240' 
         ]);
 
