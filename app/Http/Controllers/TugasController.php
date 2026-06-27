@@ -70,25 +70,35 @@ class TugasController extends Controller
     }
 
     // 1. Mengambil SEMUA daftar tugas
-    public function index()
-    {
-        try {
-            // Mengambil semua data tugas dan diurutkan dari yang paling baru
-            $tugas = Tugas::orderBy('created_at', 'DESC')->get();
+    public function index(Request $request)
+{
+    try {
+        // Ambil kelas_id dari request query
+        $kelasId = $request->query('kelas_id');
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Daftar semua tugas berhasil diambil',
-                'data'    => $tugas
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil data tugas: ' . $e->getMessage()
-            ], 500);
+        // Jika ada kelas_id, filter berdasarkan itu. Jika tidak, ambil semua.
+        $query = Tugas::orderBy('created_at', 'DESC');
+        
+        if ($kelasId) {
+            $query->where('kelas_id', $kelasId);
         }
+
+        $tugas = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar tugas berhasil diambil',
+            'data'    => $tugas
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal mengambil data tugas: ' . $e->getMessage()
+        ], 500);
     }
+}
+
 
     // 2. Mengambil DETAIL satu tugas berdasarkan ID Tugas
     public function show($id)
