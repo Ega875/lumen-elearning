@@ -133,4 +133,16 @@ class KelasController extends Controller
             ], 500);
         }
     }
+
+    // FUNGSI UNTUK MENAMPILKAN DAFTAR KELAS GURU
+public function index(Request $request)
+{
+    // Mengambil semua kelas milik guru yang sedang login (berdasarkan ID dari JWT)
+    $kelas = Kelas::where('guru_id', $request->auth->id)->get();
+
+    return response()->json([
+        'success' => true,
+        'data'    => $kelas
+    ], 200);
+}
 }

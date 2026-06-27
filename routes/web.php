@@ -46,6 +46,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         // Manajemen Kelas
         $router->post('/kelas', 'KelasController@store');      // Guru bikin kelas
         $router->post('/kelas/join', 'KelasController@join');  // Siswa gabung kelas
+        $router->get('/kelas', 'KelasController@index');       // Guru lihat daftar kelas
         $router->delete('/kelas/{id}/leave', 'KelasController@leave'); // Siswa keluar kelas
         
         // --- FORUM DISKUSI ---
