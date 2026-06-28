@@ -47,11 +47,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/kelas', 'KelasController@store');      // Guru bikin kelas
         $router->post('/kelas/join', 'KelasController@join');  // Siswa gabung kelas
         $router->get('/kelas', 'KelasController@index');       // Guru lihat daftar kelas
+        $router->get('/kelas/joined', 'KelasController@kelasDiikuti'); // Siswa lihat daftar kelas yang diikuti
         $router->delete('/kelas/{id}/leave', 'KelasController@leave'); // Siswa keluar kelas
         
         // --- FORUM DISKUSI ---
         $router->post('/kelas/{kelasId}/diskusi', 'DiskusiController@store'); // Kirim pesan
         $router->get('/kelas/{kelasId}/diskusi', 'DiskusiController@index');  // Lihat semua pesan
     });
-
 });

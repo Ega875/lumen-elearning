@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kelas;
 use Illuminate\Support\Str;
 use App\Models\PesertaKelas;
+use Illuminate\Support\Facades\DB;
 
 class KelasController extends Controller
 {
@@ -135,14 +136,33 @@ class KelasController extends Controller
     }
 
     // FUNGSI UNTUK MENAMPILKAN DAFTAR KELAS GURU
-public function index(Request $request)
-{
-    // Mengambil semua kelas milik guru yang sedang login (berdasarkan ID dari JWT)
-    $kelas = Kelas::where('guru_id', $request->auth->id)->get();
+    public function kelasDiikuti()
+    {
+        try {
+        $siswaId = auth()->user()->id; // Ambil ID siswa dari token JWT
+        $daftarKelas = DB::table('kelas_siswa')
+            ->join('kelas', 'kelas_siswa.kelas_id', '=', 'kelas.id')
+            ->where('kelas_siswa.siswa_id', $siswaId)
+            ->select(
+                'kelas.id',
+                'kelas.guru_id',
+                'kelas.nama_kelas',
+                'kelas.kode_kelas',
+                'kelas.deskripsi',
+                'kelas.created_at',
+            )
+            ->get();
 
-    return response()->json([
-        'success' => true,
-        'data'    => $kelas
-    ], 200);
-}
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Daftar kelas berhasil dimuat.',
+            'data' => $daftarKelas
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat memuat daftar kelas: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

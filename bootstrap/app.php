@@ -60,6 +60,7 @@ $app->singleton(
 */
 
 $app->configure('app');
+//$app->configure('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -92,8 +93,10 @@ $app->routeMiddleware([
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+//$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+// Tambahkan ini agar Lumen mengenali driver 'jwt'
+//$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
