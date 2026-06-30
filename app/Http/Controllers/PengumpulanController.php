@@ -24,8 +24,8 @@ class PengumpulanController extends Controller
 
         // 3. Cek apakah siswa ini sudah pernah mengumpulkan jawaban untuk tugas ini
         $pengumpulan = PengumpulanTugas::where('tugas_id', $tugasId)
-                                       ->where('user_id', $request->auth->id)
-                                       ->first();
+                                    ->where('user_id', $request->auth->id)
+                                    ->first();
 
         try {
             // Jika belum pernah kumpul, buat instansiasi baru

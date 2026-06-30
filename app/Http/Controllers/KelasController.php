@@ -136,20 +136,20 @@ class KelasController extends Controller
     }
 
     // FUNGSI UNTUK MENAMPILKAN DAFTAR KELAS GURU
-    public function kelasDiikuti()
+    public function kelasDiikuti(Request $request)
     {
         try {
-        $siswaId = auth()->user()->id; // Ambil ID siswa dari token JWT
-        $daftarKelas = DB::table('kelas_siswa')
-            ->join('kelas', 'kelas_siswa.kelas_id', '=', 'kelas.id')
-            ->where('kelas_siswa.siswa_id', $siswaId)
+        $siswaId = $request->auth->id; // Ambil ID siswa dari token JWT
+        $daftarKelas = DB::table('peserta_kelas')
+            ->join('kelas', 'peserta_kelas.kelas_id', '=', 'kelas.id')
+            ->where('peserta_kelas.siswa_id', $siswaId)
             ->select(
                 'kelas.id',
                 'kelas.guru_id',
                 'kelas.nama_kelas',
                 'kelas.kode_kelas',
                 'kelas.deskripsi',
-                'kelas.created_at',
+                'kelas.created_at'
             )
             ->get();
 
@@ -161,6 +161,33 @@ class KelasController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
+                'message' => 'Terjadi kesalahan saat memuat daftar kelas: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // FUNGSI UNTUK MENAMPILKAN DAFTAR KELAS MILIK GURU (INI YANG BENAR)
+    public function index(Request $request)
+    {
+        try {
+            // Ambil ID Guru dari Token JWT (Sama seperti logika di fungsi store)
+            $guruId = $request->auth->id; 
+
+            // Ambil data kelas yang cuma dibuat oleh Guru tersebut
+            // Pakai get() supaya kalau kosong, tetap mereturn array [] (Status 200)
+            $daftarKelas = Kelas::where('guru_id', $guruId)
+                                ->orderBy('id', 'DESC')
+                                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Daftar kelas berhasil dimuat.',
+                'data'    => $daftarKelas
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
                 'message' => 'Terjadi kesalahan saat memuat daftar kelas: ' . $e->getMessage()
             ], 500);
         }

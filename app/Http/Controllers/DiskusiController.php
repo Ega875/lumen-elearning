@@ -72,8 +72,8 @@ class DiskusiController extends Controller
         try {
             // Ambil semua pesan dan urutkan dari yang terlama ke terbaru (asc)
             $obrolan = Diskusi::where('kelas_id', $kelasId)
-                              ->orderBy('created_at', 'asc')
-                              ->get();
+                            ->orderBy('created_at', 'asc')
+                            ->get();
 
             return response()->json([
                 'success' => true,
