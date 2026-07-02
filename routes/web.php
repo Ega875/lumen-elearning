@@ -49,9 +49,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/kelas', 'KelasController@index');       // Guru lihat daftar kelas
         $router->get('/kelas/joined', 'KelasController@kelasDiikuti'); // Siswa lihat daftar kelas yang diikuti
         $router->delete('/kelas/{id}/leave', 'KelasController@leave'); // Siswa keluar kelas
+        $router->get('/kelas/{id}/peserta', 'KelasController@peserta'); // Guru lihat daftar peserta kelas
         
         // --- FORUM DISKUSI ---
         $router->post('/kelas/{kelasId}/diskusi', 'DiskusiController@store'); // Kirim pesan
         $router->get('/kelas/{kelasId}/diskusi', 'DiskusiController@index');  // Lihat semua pesan
+
+        // Manajemen Materi
+    $router->post('/kelas/{kelasId}/materi', 'MateriController@store'); // Guru upload materi
+    $router->get('/kelas/{kelasId}/materi', 'MateriController@index');  // Siswa/Guru lihat materi
     });
 });

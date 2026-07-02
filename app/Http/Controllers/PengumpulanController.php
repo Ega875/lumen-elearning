@@ -78,11 +78,16 @@ class PengumpulanController extends Controller
 
     // FUNGSI GURU MELIHAT DAFTAR JAWABAN SISWA
     // Parameter $tugasId untuk melihat tugas spesifik mana yang mau dicek
+    // FUNGSI GURU MELIHAT DAFTAR JAWABAN SISWA (VERSI REVISI)
+    // Parameter $tugasId untuk melihat tugas spesifik mana yang mau dicek
     public function listJawaban($tugasId)
     {
         try {
-            // Ambil semua data pengumpulan berdasarkan ID tugasnya
-            $pengumpulan = PengumpulanTugas::where('tugas_id', $tugasId)->get();
+            // 🔴 PERUBAHAN DI SINI: Melakukan JOIN dengan tabel 'users' untuk mengambil 'nama_lengkap' siswa
+            $pengumpulan = PengumpulanTugas::join('users', 'pengumpulan_tugas.user_id', '=', 'users.id')
+                            ->where('pengumpulan_tugas.tugas_id', $tugasId)
+                            ->select('pengumpulan_tugas.*', 'users.nama_lengkap') // Mengambil semua kolom tugas + nama lengkap siswa
+                            ->get();
 
             return response()->json([
                 'success' => true,

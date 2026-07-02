@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('kelas_id')->constrained()->onDelete('cascade');
             $table->string('judul_materi');
             $table->text('isi_materi');
-            $table->string('lampiran_url')->nullable();
+            $table->string('lampiran_file')->nullable();
             $table->timestamps();
         });
     }

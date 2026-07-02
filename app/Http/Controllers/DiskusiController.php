@@ -52,15 +52,14 @@ class DiskusiController extends Controller
     }
 
     // 2. FUNGSI MELIHAT RIWAYAT OBROLAN
+    // FUNGSI MELIHAT RIWAYAT OBROLAN (VERSI REVISI JOIN USERS)
     public function index(Request $request, $kelasId)
     {
-        // Pastikan kelasnya ada
         $kelas = Kelas::find($kelasId);
         if (!$kelas) {
             return response()->json(['success' => false, 'message' => 'Kelas tidak ditemukan!'], 404);
         }
 
-        // KEAMANAN: Jangan izinkan user asing mengintip isi diskusi
         $userId = $request->auth->id;
         $isGuru = ($kelas->guru_id == $userId);
         $isSiswa = PesertaKelas::where('kelas_id', $kelasId)->where('siswa_id', $userId)->exists();
@@ -70,9 +69,11 @@ class DiskusiController extends Controller
         }
 
         try {
-            // Ambil semua pesan dan urutkan dari yang terlama ke terbaru (asc)
-            $obrolan = Diskusi::where('kelas_id', $kelasId)
-                            ->orderBy('created_at', 'asc')
+            // 🔴 PERUBAHAN: Join dengan tabel users untuk mengambil nama_lengkap pengirim chat
+            $obrolan = Diskusi::join('users', 'diskusi.user_id', '=', 'users.id')
+                            ->where('diskusi.kelas_id', $kelasId)
+                            ->orderBy('diskusi.created_at', 'asc')
+                            ->select('diskusi.*', 'users.nama_lengkap') // Mengambil data chat + nama lengkap
                             ->get();
 
             return response()->json([

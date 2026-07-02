@@ -192,4 +192,28 @@ class KelasController extends Controller
             ], 500);
         }
     }
+
+    // FUNGSI UNTUK MENAMPILKAN DAFTAR SISWA DI SATU KELAS
+    public function peserta($id)
+    {
+        try {
+            // Memanfaatkan Model PesertaKelas secara langsung (Lebih rapi dan singkat!)
+            $peserta = PesertaKelas::join('users', 'peserta_kelas.siswa_id', '=', 'users.id')
+                ->where('peserta_kelas.kelas_id', $id)
+                ->select('users.id', 'users.nama_lengkap') // Cek database, apakah kolomnya 'name' atau 'nama'
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Daftar peserta berhasil ditarik',
+                'data'    => $peserta
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menarik data peserta: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
